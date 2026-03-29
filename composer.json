@@ -13,14 +13,14 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "ziix-admin",
+            "name": "Rasmus Hurup | ziix.dk",
             "email": "info@ziix.dk"
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=8.3.0",
         "laravel/framework": ">=7.0",
-        "open-admin-org/open-admin": "~1.0",
+        "ziixdk/admin": "~3.0",
         "ckeditor/ckeditor": "4.21"
     },
     "require-dev": {
