@@ -3,6 +3,7 @@
     "description": "Integrate CKEDITOR into ziix-admin",
     "type": "library",
     "keywords": [
+        "ziix-admin",
         "open-admin",
         "wysiwyg",
         "extension",
@@ -20,8 +21,7 @@
     "require": {
         "php": ">=8.3.0",
         "laravel/framework": ">=7.0",
-        "ziixdk/admin": ">=3.0.5",
-        "ckeditor/ckeditor": "4.21"
+        "ziixdk/admin": ">=3.0.5"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0",
