@@ -14,6 +14,6 @@ class CKEditor extends Extension
 
     public function assets()
     {
-        return base_path('vendor/ckeditor/ckeditor');
+        return base_path('vendor/ziixdk/admin-ext-ckeditor/resources/assets/ckeditor');
     }
 }
