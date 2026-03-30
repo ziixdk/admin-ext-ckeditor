@@ -20,7 +20,7 @@
     "require": {
         "php": ">=8.3.0",
         "laravel/framework": ">=7.0",
-        "ziixdk/admin": "~3.0",
+        "ziixdk/admin": ">=3.0.5",
         "ckeditor/ckeditor": "4.21"
     },
     "require-dev": {
