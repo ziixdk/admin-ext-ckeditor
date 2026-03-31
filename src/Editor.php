@@ -6,7 +6,7 @@ use ZiiX\Admin\Form\Field\Textarea;
 
 class Editor extends Textarea
 {
-    protected $view = 'open-admin-ckeditor::editor';
+    protected $view = 'ziix-admin-ckeditor::editor';
 
     public function setupImageBrowse()
     {
