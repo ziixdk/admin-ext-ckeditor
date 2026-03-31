@@ -23,12 +23,12 @@ class CKEditorServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole() && $assets = $extension->assets()) {
             $this->publishes(
-                [$assets => public_path('vendor/ziixdk/admin-ext-ckeditor')],
+                [$assets => public_path('vendor/ziix-admin-ext-ckeditor')],
                 'admin-ext-ckeditor'
             );
         }
         Admin::booting(function () {
-            Admin::js('vendor/ziixdk/admin-ext-ckeditor/ckeditor.js', false); // prevent minifying (last arg)
+            Admin::js('vendor/ziix-admin-ext-ckeditor/ckeditor.js', false); // prevent minifying (last arg)
             Form::extend('ckeditor', Editor::class);
         });
     }
