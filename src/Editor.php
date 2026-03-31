@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\CKEditor;
+namespace ZiiX\Admin\CKEditor;
 
 use ZiiX\Admin\Form\Field\Textarea;
 
