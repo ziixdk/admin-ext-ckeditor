@@ -27,7 +27,6 @@ class CKEditorServiceProvider extends ServiceProvider
                 'admin-ext-ckeditor'
             );
         }
-
         Admin::booting(function () {
             Admin::js('vendor/ziixdk/admin-ext-ckeditor/ckeditor.js', false); // prevent minifying (last arg)
             Form::extend('ckeditor', Editor::class);
