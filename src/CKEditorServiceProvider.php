@@ -18,13 +18,13 @@ class CKEditorServiceProvider extends ServiceProvider
         }
 
         if ($views = $extension->views()) {
-            $this->loadViewsFrom($views, 'admin-ext-ckeditor');
+            $this->loadViewsFrom($views, 'ziix-admin-ext-ckeditor');
         }
 
         if ($this->app->runningInConsole() && $assets = $extension->assets()) {
             $this->publishes(
                 [$assets => public_path('vendor/ziix-admin-ext-ckeditor')],
-                'admin-ext-ckeditor'
+                'ziix-admin-ext-ckeditor'
             );
         }
         Admin::booting(function () {
