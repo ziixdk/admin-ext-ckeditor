@@ -10,8 +10,8 @@ class Editor extends Textarea
 
     public function setupImageBrowse()
     {
-        $this->options['filebrowserBrowseUrl'] = '/admin/media/?select=true&close=true&fn=window.opener.'.$this->id.'_selectFile';
-        $this->options['filebrowserImageBrowseUrl'] = '/admin/media?select=true&close=true&fn=window.opener.'.$this->id.'_selectFile';
+        $this->options['filebrowserBrowseUrl'] = '/admin/media/?select=true&close=true&fn=window.'.$this->id.'_selectFile';
+        $this->options['filebrowserImageBrowseUrl'] = '/admin/media?select=true&close=true&fn=window.'.$this->id.'_selectFile';
     }
 
     public function render()
