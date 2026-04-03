@@ -10,8 +10,8 @@ class Editor extends Textarea
 
     public function setupImageBrowse()
     {
-        $this->options['filebrowserBrowseUrl'] = '/admin/media/?select=true&close=true&fn=window.'.$this->id.'_selectFile';
-        $this->options['filebrowserImageBrowseUrl'] = '/admin/media?select=true&close=true&fn=window.'.$this->id.'_selectFile';
+        $this->options['filebrowserBrowseUrl'] = '/admin/media/?select=true&close=true';
+        $this->options['filebrowserImageBrowseUrl'] = '/admin/media?select=true&close=true';
     }
 
     public function render()
@@ -22,28 +22,6 @@ class Editor extends Textarea
         $config = json_encode(array_merge($config, $this->options));
 
         $this->script = <<<JS
-function {$this->id}_selectFile(url,file_name)
-{
-    var dialog = CKEDITOR.dialog.getCurrent();
-    dialogName = dialog.getName();
-
-    if ( dialogName == 'link' ) {
-
-        dialog.getContentElement('info', 'url').setValue(url);
-        linkDisplayText = dialog.getContentElement('info', 'linkDisplayText')
-        if (linkDisplayText.getValue() == ""){
-            linkDisplayText.setValue(file_name);
-        }
-
-    }else{
-
-        // dialogName == image
-        dialog.selectPage('info');
-        dialog.getContentElement('info', 'txtUrl').setValue(url);
-        dialog.getContentElement('info', 'txtAlt').setValue(file_name);
-    }
-}
-window.{$this->id}_selectFile = {$this->id}_selectFile; // make it globaly available
 var editor = CKEDITOR.replace('{$this->id}', $config);
 function CKupdate() {
     for (instance in CKEDITOR.instances){

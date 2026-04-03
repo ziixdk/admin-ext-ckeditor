@@ -15,7 +15,7 @@ composer require ziixdk/admin-ext-ckeditor
 
 Then
 ```bash
-php artisan vendor:publish --tag=open-admin-ckeditor
+php artisan vendor:publish --tag=ziix-admin-ext-ckeditor
 ```
 
 ## Configuration
