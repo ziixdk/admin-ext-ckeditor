@@ -29,53 +29,61 @@
            template:
                    '<div class="btgrid">' +
                    '</div>',
-           //button: lang.createBtGrid,
            dialog: 'btgrid',
-           defaults: {
-            //  colCount: 2,
-            // rowCount: 1
-          },
-          // Before init.
+           defaults: {},
            upcast: function(element) {
              return element.name == 'div' && element.hasClass('btgrid');
            },
-           // initialize
-           // Init function is useful after copy paste rebuild.
+           // Rebuild editables after copy-paste by detecting actual column count per row
            init: function() {
-             var rowNumber= 1;
+             var rowNumber = 1;
              var rowCount = this.element.getChildCount();
-             for (rowNumber; rowNumber <= rowCount;rowNumber++) {
-               this.createEditable(maxGridColumns, rowNumber);
+             for (rowNumber; rowNumber <= rowCount; rowNumber++) {
+               var rowEl = this.element.getChild(rowNumber - 1);
+               var colCount = rowEl ? rowEl.getChildCount() : maxGridColumns;
+               this.createEditable(colCount, rowNumber);
              }
            },
-           // Prepare data
            data: function() {
-             if (this.data.colCount && this.element.getChildCount() < 1) {
-               var colCount = this.data.colCount;
+             if (this.element.getChildCount() < 1) {
+               var cols = this.data.customLayout || this.data.colCount;
+               if (!cols) return;
                var rowCount = this.data.rowCount;
                var row = this.parts['btgrid'];
-               for (var i= 1;i <= rowCount;i++) {
-                 this.createGrid(colCount, row, i);
+               for (var i = 1; i <= rowCount; i++) {
+                 this.createGrid(cols, row, i);
                }
              }
            },
-           //Helper functions.
-           // Create grid
-           createGrid: function(colCount, row, rowNumber) {
+           // Create grid — cols can be a number (equal columns) or a "4-4-4" string
+           createGrid: function(cols, row, rowNumber) {
+             var widths = [];
+             if (typeof cols === 'string' && cols.indexOf('-') !== -1) {
+               var parts = cols.split('-');
+               for (var j = 0; j < parts.length; j++) {
+                 widths.push(parseInt(parts[j], 10));
+               }
+             } else {
+               var count = parseInt(cols, 10);
+               var w = maxGridColumns / count;
+               for (var k = 0; k < count; k++) {
+                 widths.push(w);
+               }
+             }
+
              var content = '<div class="row row-' + rowNumber + '">';
-             for (var i = 1; i <= colCount; i++) {
-               content = content + '<div class="col col-md-' + maxGridColumns/colCount + '">' +
+             for (var i = 0; i < widths.length; i++) {
+               content = content + '<div class="col col-md-' + widths[i] + '">' +
                                    '  <div class="content">' +
-                                   '    <p>Col ' + i + ' content area</p>' +
+                                   '    <p>Col ' + (i + 1) + ' content area</p>' +
                                    '  </div>' +
                                    '</div>';
              }
-             content =content + '</div>';
+             content = content + '</div>';
              row.appendHtml(content);
-             this.createEditable(colCount, rowNumber);
+             this.createEditable(widths.length, rowNumber);
            },
-           // Create editable.
-           createEditable: function(colCount,rowNumber) {
+           createEditable: function(colCount, rowNumber) {
              for (var i = 1; i <= colCount; i++) {
                this.initEditable( 'content'+ rowNumber + i, {
                   selector: '.row-'+ rowNumber +' > div:nth-child('+ i +') div.content'

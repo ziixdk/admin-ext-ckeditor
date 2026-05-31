@@ -1,39 +1,58 @@
 CKEDITOR.dialog.add( 'btgrid', function( editor ) {
   var lang = editor.lang.btgrid;
-  var commonLang = editor.lang.common;
 
-  // Whole-positive-integer validator.
   function validatorNum(msg) {
     return function() {
       var value = this.getValue(),
         pass = !!(CKEDITOR.dialog.validate.integer()(value) && value > 0);
-
       if (!pass) {
         alert(msg); // jshint ignore:line
       }
-
       return pass;
     };
   }
+
+  function validatorLayout(msg) {
+    return function() {
+      var value = this.getValue();
+      if (!value) return true; // optional field
+      var parts = value.split('-');
+      var sum = 0;
+      for (var i = 0; i < parts.length; i++) {
+        var n = parseInt(parts[i], 10);
+        if (isNaN(n) || n < 1 || n > 12) {
+          alert(msg); // jshint ignore:line
+          return false;
+        }
+        sum += n;
+      }
+      if (sum > 12) {
+        alert(lang.layoutSumError); // jshint ignore:line
+        return false;
+      }
+      return true;
+    };
+  }
+
   return {
     title: lang.editBtGrid,
     minWidth: 600,
     minHeight: 300,
     onShow: function() {
-      // Detect if there's a selected table.
-      var selection = editor.getSelection(),
-        ranges = selection.getRanges();
+      var selection = editor.getSelection();
       var command = this.getName();
 
       var rowsInput = this.getContentElement('info', 'rowCount'),
-        colsInput = this.getContentElement('info', 'colCount');
+        colsInput = this.getContentElement('info', 'colCount'),
+        layoutInput = this.getContentElement('info', 'customLayout');
+
       if (command == 'btgrid') {
         var grid = selection.getSelectedElement();
-        // Enable or disable row and cols.
         if (grid) {
           this.setupContent(grid);
           rowsInput && rowsInput.disable();
           colsInput && colsInput.disable();
+          layoutInput && layoutInput.disable();
         }
       }
     },
@@ -43,6 +62,20 @@ CKEDITOR.dialog.add( 'btgrid', function( editor ) {
         label: lang.infoTab,
         accessKey: 'I',
         elements: [
+          {
+            id: 'customLayout',
+            type: 'text',
+            label: lang.customLayout,
+            'default': '',
+            setup: function( widget ) {
+              this.setValue( widget.data.customLayout || '' );
+            },
+            commit: function( widget ) {
+              var val = this.getValue().trim();
+              widget.setData( 'customLayout', val || null );
+            },
+            validate: validatorLayout(lang.layoutError)
+          },
           {
             id: 'colCount',
             type: 'select',
@@ -60,9 +93,11 @@ CKEDITOR.dialog.add( 'btgrid', function( editor ) {
             setup: function( widget ) {
               this.setValue(widget.data.colCount);
             },
-            // When committing (saving) this field, set its value to the widget data.
             commit: function( widget ) {
-              widget.setData( 'colCount', this.getValue());
+              var layout = this.getDialog().getContentElement('info', 'customLayout').getValue().trim();
+              if (!layout) {
+                widget.setData( 'colCount', this.getValue());
+              }
             }
           },
           {
