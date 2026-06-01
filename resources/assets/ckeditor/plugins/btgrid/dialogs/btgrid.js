@@ -12,6 +12,13 @@ CKEDITOR.dialog.add( 'btgrid', function( editor ) {
     };
   }
 
+  // Is a custom layout (e.g. "3-6-3") entered? When it is, the equal-column
+  // count and row count below become optional — the layout fully defines a row.
+  function hasCustomLayout(field) {
+    var el = field.getDialog().getContentElement('info', 'customLayout');
+    return !!(el && el.getValue() && el.getValue().trim());
+  }
+
   function validatorLayout(msg) {
     return function() {
       var value = this.getValue();
@@ -67,6 +74,12 @@ CKEDITOR.dialog.add( 'btgrid', function( editor ) {
             type: 'text',
             label: lang.customLayout,
             'default': '',
+            onLoad: function() {
+              var input = this.getInputElement && this.getInputElement();
+              if (input) {
+                input.setAttribute('placeholder', lang.layoutPlaceholder || 'e.g. 3-6-3');
+              }
+            },
             setup: function( widget ) {
               this.setValue( widget.data.customLayout || '' );
             },
@@ -79,7 +92,6 @@ CKEDITOR.dialog.add( 'btgrid', function( editor ) {
           {
             id: 'colCount',
             type: 'select',
-            required: true,
             label: lang.selNumCols,
             items: [
               [ '1', 1],
@@ -89,7 +101,11 @@ CKEDITOR.dialog.add( 'btgrid', function( editor ) {
               [ '6', 6],
               [ '12', 12],
             ],
-            validate: validatorNum(lang.numColsError),
+            // Skip validation when a custom layout is provided (it overrides this).
+            validate: function() {
+              if (hasCustomLayout(this)) return true;
+              return validatorNum(lang.numColsError).call(this);
+            },
             setup: function( widget ) {
               this.setValue(widget.data.colCount);
             },
@@ -104,14 +120,18 @@ CKEDITOR.dialog.add( 'btgrid', function( editor ) {
             id: 'rowCount',
             type: 'text',
             width: '50px',
-            required: true,
             label: lang.genNrRows,
-            validate: validatorNum(lang.numRowsError),
+            // Rows default to 1 when a custom layout is used and this is left empty.
+            validate: function() {
+              if (hasCustomLayout(this) && !this.getValue().trim()) return true;
+              return validatorNum(lang.numRowsError).call(this);
+            },
             setup: function( widget ) {
               this.setValue( widget.data.rowCount );
             },
             commit: function( widget ) {
-              widget.setData( 'rowCount', this.getValue());
+              var value = parseInt( this.getValue(), 10 );
+              widget.setData( 'rowCount', value > 0 ? value : 1 );
             }
           }
         ]

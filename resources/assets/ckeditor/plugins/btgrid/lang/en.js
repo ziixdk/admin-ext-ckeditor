@@ -9,6 +9,7 @@ CKEDITOR.plugins.setLang( 'btgrid', 'en', {
 	numColsError:  'Please select number of columns.',
 	numRowsError: 'Please insert numeric value for Number of rows.',
 	customLayout: 'Custom column layout (e.g. 4-4-4 or 5-2-5, must sum to ≤ 12)',
+	layoutPlaceholder: 'e.g. 3-6-3',
 	layoutError: 'Each value must be a number between 1 and 12.',
 	layoutSumError: 'Column widths must sum to 12 or less.',
 } );
